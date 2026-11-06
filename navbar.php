@@ -65,8 +65,6 @@ $user_role    = $_SESSION['role'] ?? '';
 
                 <span class="ed-account">
                     <?php echo htmlspecialchars($user_name); ?>
-
-                    <span class="ed-account-arrow">▼</span>
                 </span>
 
                 <a
@@ -83,10 +81,7 @@ $user_role    = $_SESSION['role'] ?? '';
                     class="ed-account"
                 >
                     Login / Register
-
-                    <span class="ed-account-arrow">
-                        ▼
-                    </span>
+            
                 </a>
 
             <?php endif; ?>
@@ -115,59 +110,480 @@ $user_role    = $_SESSION['role'] ?? '';
 
     <div class="ed-container ed-navigation-inner">
 
-        <a href="index.php">
-            Home
+ <?php if (basename($_SERVER['PHP_SELF']) !== 'index.php'): ?>
+
+    <a href="index.php">
+        Home
+    </a>
+
+<?php endif; ?>
+
+        <div class="ed-nav-dropdown">
+    <a href="products.php?category=Audio" class="ed-nav-link">
+        Audio <span class="ed-nav-arrow">⌄</span>
+    </a>
+
+    <div class="ed-dropdown-menu">
+        <a href="products.php?category=Audio&brand=Apple">Apple Audio</a>
+        <a href="products.php?category=Audio&brand=Infinix">Infinix Audio</a>
+        <a href="products.php?category=Audio&brand=Samsung">Samsung Audio</a>
+        <a href="products.php?category=Audio&brand=Lenovo">Lenovo Audio</a>
+        <a href="products.php?category=Audio&brand=HiFuture">HiFuture Audio</a>
+        <a href="products.php?category=Audio&brand=Sony">Sony Audio</a>
+    </div>
+</div>
+
+       <!-- Accessories Dropdown -->
+<div class="ed-nav-dropdown">
+    <a href="#" class="ed-nav-link">Accessories ⌄ </a>
+
+    <div class="ed-dropdown-menu">
+
+        <!-- Computer Accessories Submenu -->
+        <div class="ed-sub-dropdown">
+            <a href="#" class="ed-dropdown-link">
+                Computer Accessories <span>›</span>
+            </a>
+
+            <div class="ed-sub-dropdown-menu">
+                <a href="products.php?category=Cooling Pad">Cooling Pad</a>
+                <a href="products.php?category=Laptop Bags">Laptop Bags</a>
+                <a href="products.php?category=Laptop Skins">Laptop Skins</a>
+                <a href="products.php?category=Mouse and Keyboards">Mouse and Keyboards</a>
+                <a href="products.php?category=Webcams">Webcams</a>
+                <a href="products.php?category=External Storage Devices">External Storage Devices</a>
+            </div>
+        </div>
+
+        <!-- Mobile Accessories Submenu -->
+        <div class="ed-sub-dropdown">
+            <a href="#" class="ed-dropdown-link">
+                Mobile Accessories <span>›</span>
+            </a>
+
+            <div class="ed-sub-dropdown-menu">
+                <a href="products.php?category=Mobile Chargers">Mobile Chargers</a>
+                <a href="products.php?category=Mobile Cables">Mobile Cables</a>
+                <a href="products.php?category=Memory Cards">Memory Cards</a>
+                <a href="products.php?category=Power Banks">Power Banks</a>
+                <a href="products.php?category=Screen Guards">Screen Guards</a>
+            </div>
+        </div>
+
+        <!-- Direct Link: No Dropdown -->
+        <a href="other-accessories.php" class="ed-dropdown-link">
+            Other Accessories
         </a>
 
-        <a href="products.php?category=Audio">
-            Audio
-            <span class="ed-nav-arrow">⌄</span>
+    </div>
+</div>
+
+        <!-- Desktops Dropdown -->
+<div class="ed-nav-dropdown">
+    <a href="#" class="ed-nav-link">Desktops ⌄</a>
+
+    <div class="ed-dropdown-menu">
+        <a href="products.php?category=Acer Desktops" class="ed-dropdown-link">
+            Acer Desktops
         </a>
 
-        <a href="products.php?category=Accessories">
-            Accessories
-            <span class="ed-nav-arrow">⌄</span>
+        <a href="products.php?category=Asus Desktops" class="ed-dropdown-link">
+            Asus Desktops
         </a>
 
-        <a href="products.php?category=Desktops">
-            Desktops
-            <span class="ed-nav-arrow">⌄</span>
+        <a href="products.php?category=Apple iMac" class="ed-dropdown-link">
+            Apple iMac
         </a>
 
-        <a href="products.php?category=Gaming">
-            Gaming
-            <span class="ed-nav-arrow">⌄</span>
+        <a href="products.php?category=Lenovo Desktops" class="ed-dropdown-link">
+            Lenovo Desktops
         </a>
 
-        <a href="products.php?category=Laptops">
-            Laptops
-            <span class="ed-nav-arrow">⌄</span>
+        <a href="products.php?category=Dell Desktops" class="ed-dropdown-link">
+            Dell Desktops
         </a>
 
-        <a href="products.php?category=Mobile">
-            Mobile
-            <span class="ed-nav-arrow">⌄</span>
+        <a href="products.php?category=HP Desktops" class="ed-dropdown-link">
+            HP Desktops
+        </a>
+    </div>
+</div>
+
+        <!-- Gaming Dropdown -->
+<div class="ed-nav-dropdown">
+    <a href="#" class="ed-nav-link">Gaming ⌄</a>
+
+    <div class="ed-dropdown-menu">
+        <a href="products.php?category=Gaming Laptops"
+           class="ed-dropdown-link">
+            Gaming Laptops
         </a>
 
-        <a href="products.php?category=Peripherals">
-            Peripherals
-            <span class="ed-nav-arrow">⌄</span>
+        <a href="products.php?category=Microsoft Games"
+           class="ed-dropdown-link">
+            Microsoft Games
         </a>
 
-        <a href="products.php?category=Smart%20Home">
-            Smart Home
-            <span class="ed-nav-arrow">⌄</span>
+        <a href="products.php?category=Sony Consoles"
+           class="ed-dropdown-link">
+            Sony Consoles
         </a>
 
-        <a href="products.php?category=Smart%20Watches">
-            Smart Watches
-            <span class="ed-nav-arrow">⌄</span>
+        <a href="products.php?category=Lenovo Handheld Consoles"
+           class="ed-dropdown-link">
+            Lenovo Handheld Consoles
         </a>
+    </div>
+</div>
+       <li class="ed-dropdown">
+    <a href="products.php?category=laptop">
+        Laptops
+        <span class="ed-nav-arrow">⌄</span>
+    </a>
 
-        <a href="products.php?category=Tablets">
-            Tablets
-            <span class="ed-nav-arrow">⌄</span>
-        </a>
+    <ul class="ed-dropdown-menu">
+
+        <!-- ASUS -->
+        <li class="ed-submenu">
+            <a href="#">ASUS <span>›</span></a>
+            <ul class="ed-submenu-menu">
+                <li><a href="#">ZenBook</a></li>
+                <li><a href="#">VivoBook</a></li>
+                <li><a href="#">ROG Series</a></li>
+            </ul>
+        </li>
+
+        <!-- APPLE -->
+        <li class="ed-submenu">
+            <a href="#">Apple <span>›</span></a>
+            <ul class="ed-submenu-menu">
+                <li><a href="#">MacBook Air</a></li>
+                <li><a href="#">MacBook Pro</a></li>
+                <li><a href="#">MacBook Neo</a></li>
+            </ul>
+        </li>
+
+        <!-- DELL -->
+        <li class="ed-submenu">
+            <a href="#">Dell <span>›</span></a>
+            <ul class="ed-submenu-menu">
+                <li><a href="#">Inspiron</a></li>
+                <li><a href="#">XPS</a></li>
+                <li><a href="#">Alienware</a></li>
+            </ul>
+        </li>
+
+        <!-- HP -->
+        <li class="ed-submenu">
+            <a href="#">HP <span>›</span></a>
+            <ul class="ed-submenu-menu">
+                <li><a href="#">Pavilion</a></li>
+                <li><a href="#">Envy</a></li>
+                <li><a href="#">Spectre</a></li>
+            </ul>
+        </li>
+
+        <!-- LENOVO -->
+        <li class="ed-submenu">
+            <a href="#">Lenovo <span>›</span></a>
+            <ul class="ed-submenu-menu">
+                <li><a href="#">ThinkPad</a></li>
+                <li><a href="#">IdeaPad</a></li>
+                <li><a href="#">Legion</a></li>
+            </ul>
+        </li>
+
+        <!-- MICROSOFT -->
+        <li class="ed-submenu">
+            <a href="#">Microsoft <span>›</span></a>
+            <ul class="ed-submenu-menu">
+                <li><a href="#">Surface Laptop</a></li>
+                <li><a href="#">Surface Pro</a></li>
+                <li><a href="#">Surface Laptop Studio</a></li>
+            </ul>
+        </li>
+
+        <!-- SAMSUNG -->
+        <li class="ed-submenu">
+            <a href="#">Samsung <span>›</span></a>
+            <ul class="ed-submenu-menu">
+                <li><a href="#">Galaxy Book</a></li>
+                <li><a href="#">Galaxy Book Pro</a></li>
+                <li><a href="#">Galaxy Book Ultra</a></li>
+            </ul>
+        </li>
+
+        <!-- MSI -->
+        <li class="ed-submenu">
+            <a href="#">MSI <span>›</span></a>
+            <ul class="ed-submenu-menu">
+                <li><a href="#">Stealth</a></li>
+                <li><a href="#">Raider</a></li>
+                <li><a href="#">Katana</a></li>
+            </ul>
+        </li>
+
+    </ul>
+</li> 
+
+<li class="ed-dropdown">
+    <a href="products.php?category=mobile">
+        Mobile
+        <span class="ed-nav-arrow">⌄</span>
+    </a>
+
+    <ul class="ed-dropdown-menu">
+
+        <li>
+            <a href="products.php?category=mobile&brand=samsung">
+                Samsung
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=mobile&brand=apple">
+                Apple
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=mobile&brand=xiaomi">
+                Xiaomi
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=mobile&brand=oneplus">
+                OnePlus
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=mobile&brand=oppo">
+                Oppo
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=mobile&brand=vivo">
+                Vivo
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=mobile&brand=realme">
+                Realme
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=mobile&brand=motorola">
+                Motorola
+            </a>
+        </li>
+
+    </ul>
+</li>
+
+<li class="ed-dropdown">
+    <a href="products.php?category=peripherals">
+        Peripherals
+        <span class="ed-nav-arrow">⌄</span>
+    </a>
+
+    <ul class="ed-dropdown-menu">
+
+        <li>
+            <a href="products.php?category=peripherals&subcategory=air-cooler">
+                Air Cooler
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=peripherals&subcategory=monitors">
+                Monitors
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=peripherals&subcategory=network-components">
+                Network Components
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=peripherals&subcategory=printers">
+                Printers
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=peripherals&subcategory=desktop-motherboard">
+                Desktop Motherboard
+            </a>
+        </li>
+
+    </ul>
+</li>
+
+<li class="ed-dropdown">
+    <a href="products.php?category=smart-home">
+        Smart Home
+        <span class="ed-nav-arrow">⌄</span>
+    </a>
+
+    <ul class="ed-dropdown-menu">
+
+        <li>
+            <a href="products.php?category=smart-home&brand=amazon">
+                Amazon Smart Home
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=smart-home&brand=lenovo">
+                Lenovo Smart Home
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=smart-home&brand=google">
+                Google Smart Home
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=smart-home&brand=philips">
+                Philips Smart Home
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=smart-home&brand=mi">
+                MI Smart Home
+            </a>
+        </li>
+
+    </ul>
+</li>
+
+<li class="ed-dropdown">
+    <a href="products.php?category=smart-watches">
+        Smart Watches
+        <span class="ed-nav-arrow">⌄</span>
+    </a>
+
+    <ul class="ed-dropdown-menu">
+
+        <li>
+            <a href="products.php?category=smart-watches&brand=apple">
+                Apple Watch
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=smart-watches&brand=samsung">
+                Samsung Galaxy Watch
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=smart-watches&brand=google">
+                Google Pixel Watch
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=smart-watches&brand=fitbit">
+                Fitbit
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=smart-watches&brand=garmin">
+                Garmin
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=smart-watches&brand=amazfit">
+                Amazfit
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=smart-watches&brand=huawei">
+                Huawei Watch
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=smart-watches&brand=xiaomi">
+                Xiaomi Watch
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=smart-watches&brand=oneplus">
+                OnePlus Watch
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=smart-watches&brand=boat">
+                boAt Smartwatch
+            </a>
+        </li>
+
+    </ul>
+</li>
+
+<li class="ed-dropdown">
+    <a href="products.php?category=tablets">
+        Tablets
+        <span class="ed-nav-arrow">⌄</span>
+    </a>
+
+    <ul class="ed-dropdown-menu">
+
+        <li>
+            <a href="products.php?category=tablets&brand=blackview">
+                Blackview Tabs
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=tablets&brand=lenovo">
+                Lenovo Tabs
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=tablets&brand=mi">
+                Mi Pads
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=tablets&brand=oneplus">
+                OnePlus Tabs
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=tablets&brand=samsung">
+                Samsung Tabs
+            </a>
+        </li>
+
+        <li>
+            <a href="products.php?category=tablets&brand=apple">
+                iPad
+            </a>
+        </li>
+
+    </ul>
+</li>
 
     </div>
 

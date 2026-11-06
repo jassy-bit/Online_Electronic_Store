@@ -213,9 +213,15 @@
 
     gap: 4px;
 
-    overflow-x: auto;
+    overflow: visible;
+}
+.ed-navigation {
+    position: relative;
+    z-index: 1000;
+}
 
-    scrollbar-width: none;
+.ed-navigation-inner {
+    overflow: visible;
 }
 
 .ed-navigation-inner::-webkit-scrollbar {
@@ -455,4 +461,247 @@
         padding-right: 7px;
     }
 }
+/* =========================================================
+   AUDIO DROPDOWN
+========================================================= */
 
+.ed-nav-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 52px;
+    flex-shrink: 0;
+}
+
+.ed-nav-dropdown > a {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+/* Dropdown menu */
+
+.ed-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+
+    min-width: 190px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+
+    padding: 6px 0;
+
+    z-index: 99999;
+}
+
+/* Show dropdown on hover */
+
+.ed-nav-dropdown:hover .ed-dropdown-menu,
+.ed-nav-dropdown:focus-within .ed-dropdown-menu {
+    display: block;
+}
+
+/* Dropdown links */
+
+.ed-dropdown-menu a {
+    display: block;
+
+    padding: 11px 15px;
+
+    font-size: 13px;
+
+    color: #333333;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+}
+
+.ed-dropdown-menu a:hover {
+    background: #fff0e6;
+    color: #ff6600;
+}
+/* Main dropdown */
+.ed-nav-dropdown {
+    position: relative;
+}
+
+.ed-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    background: #ffffff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    z-index: 2000;
+}
+
+/* Show main dropdown on hover */
+.ed-nav-dropdown:hover > .ed-dropdown-menu {
+    display: block;
+}
+
+/* Dropdown links */
+.ed-dropdown-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    color: #222;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.ed-dropdown-link:hover,
+.ed-sub-dropdown-menu a:hover {
+    background: #f47721;
+    color: #ffffff;
+}
+
+/* Nested dropdown */
+.ed-sub-dropdown {
+    position: relative;
+}
+
+.ed-sub-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    min-width: 230px;
+    background: #ffffff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    z-index: 2001;
+}
+
+/* Show nested dropdown on hover */
+.ed-sub-dropdown:hover > .ed-sub-dropdown-menu {
+    display: block;
+}
+
+.ed-sub-dropdown-menu a {
+    display: block;
+    padding: 11px 15px;
+    color: #222;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+
+/* Main Laptop menu */
+.ed-dropdown {
+    position: relative;
+    list-style: none;
+}
+
+/* Remove all default bullets */
+.ed-dropdown,
+.ed-dropdown-menu,
+.ed-submenu,
+.ed-submenu-menu {
+    list-style: none;
+    margin: 0;
+}
+
+/* Main dropdown */
+.ed-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 210px;
+    background: #ffffff;
+    padding: 8px 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    z-index: 999;
+}
+
+/* Show dropdown on hover */
+.ed-dropdown:hover > .ed-dropdown-menu {
+    display: block;
+}
+
+/* Brand submenu */
+.ed-submenu {
+    position: relative;
+}
+
+/* Brand links */
+.ed-submenu > a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Third-level dropdown */
+.ed-submenu-menu {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    min-width: 210px;
+    background: #ffffff;
+    padding: 8px 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+/* Show product series on brand hover */
+.ed-submenu:hover > .ed-submenu-menu {
+    display: block;
+}
+
+/* Main dropdown and submenu links */
+.ed-dropdown-menu li a,
+.ed-submenu-menu li a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    color: #222222;
+    text-decoration: none;
+    white-space: nowrap;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.ed-dropdown-menu li a:hover,
+.ed-submenu-menu li a:hover {
+    background: #f5f5f5;
+    color: #f58220;
+}
+
+/* Arrow styling */
+.ed-submenu > a span {
+    font-size: 18px;
+    color: #777777;
+    margin-left: 15px;
+}
+
+/* Remove default list indentation */
+.ed-dropdown-menu,
+.ed-submenu-menu {
+    padding-left: 0;
+}
+
+/* Keep Laptop navigation bullet-free */
+.ed-dropdown {
+    padding-left: 0;
+}
+
+/* Ensure dropdown stays above page content */
+.ed-dropdown-menu,
+.ed-submenu-menu {
+    z-index: 9999;
+}

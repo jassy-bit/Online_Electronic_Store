@@ -41,7 +41,6 @@ try {
             p.id,
             p.name,
             p.brand,
-            p.model_number,
             p.description,
             p.price,
             p.stock,

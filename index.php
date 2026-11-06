@@ -7,6 +7,15 @@ require_once "database.php";
 $is_logged_in = isset($_SESSION['user_id']);
 $user_name    = $_SESSION['user_name'] ?? '';
 $user_role    = $_SESSION['role'] ?? '';
+
+function displayDiscountedPrice($price, $discount) {
+    $newPrice = $price - ($price * $discount / 100);
+
+    echo '<div class="price-row">';
+    echo '<span class="product-price">Rs. ' . number_format($newPrice) . '</span>';
+    echo '<span class="old-price">Rs. ' . number_format($price) . '</span>';
+    echo '</div>';
+}
 ?>
 
 <!DOCTYPE html>
@@ -17,6 +26,7 @@ $user_role    = $_SESSION['role'] ?? '';
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>ElectroDeals - Online Electronic Store</title>
+<link rel="stylesheet" href="navbar.css">
 
 <style>
 
@@ -24,6 +34,20 @@ $user_role    = $_SESSION['role'] ?? '';
    RESET
 ========================================================= */
 
+.price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.old-price {
+    color: #ff6600;
+    text-decoration: line-through;
+    font-size: 12px;
+    font-weight: 400;
+    margin-left: 0;
+}
 * {
     margin: 0;
     padding: 0;
@@ -62,253 +86,6 @@ img {
     width: 94%;
     max-width: 1450px;
     margin: 0 auto;
-}
-
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.header {
-    background: #fff;
-    border-bottom: 1px solid #e5e5e5;
-}
-
-.header-inner {
-    min-height: 82px;
-
-    display: grid;
-
-    grid-template-columns:
-        190px
-        minmax(300px, 1fr)
-        230px;
-
-    align-items: center;
-
-    gap: 25px;
-}
-
-
-/* =========================================================
-   LOGO
-========================================================= */
-
-.logo {
-    width: auto;
-    min-width: 0;
-
-    font-size: 28px;
-    font-weight: 500;
-
-    color: #555;
-
-    letter-spacing: -1px;
-
-    white-space: nowrap;
-}
-
-.logo span {
-    color: #ff6600;
-    font-weight: 700;
-}
-
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-.search-wrapper {
-    width: 100%;
-}
-
-.search-form {
-    width: 100%;
-    height: 46px;
-
-    display: flex;
-
-    background: #f3f5f8;
-
-    border: 1px solid #e1e4e8;
-
-    border-radius: 3px;
-
-    overflow: hidden;
-}
-
-.search-form input {
-    flex: 1;
-
-    min-width: 0;
-
-    border: none;
-    outline: none;
-
-    background: transparent;
-
-    padding: 0 17px;
-
-    font-size: 14px;
-
-    color: #222;
-}
-
-.search-form input::placeholder {
-    color: #777;
-}
-
-.search-form button {
-    width: 52px;
-    flex-shrink: 0;
-
-    border: none;
-
-    background: #ff6600;
-
-    color: #fff;
-
-    cursor: pointer;
-
-    font-size: 21px;
-}
-
-.search-form button:hover {
-    background: #e95700;
-}
-
-
-/* =========================================================
-   HEADER RIGHT
-========================================================= */
-
-.header-right {
-    width: auto;
-    min-width: 0;
-
-    display: flex;
-
-    justify-content: flex-end;
-
-    align-items: center;
-
-    gap: 16px;
-}
-
-.account {
-    display: flex;
-
-    align-items: center;
-
-    gap: 5px;
-
-    font-size: 13px;
-
-    white-space: nowrap;
-}
-
-.account:hover {
-    color: #ff6600;
-}
-
-.account-arrow {
-    font-size: 11px;
-}
-
-.cart {
-    font-size: 24px;
-
-    color: #222;
-}
-
-.cart:hover {
-    color: #ff6600;
-}
-
-
-/* =========================================================
-   CATEGORY NAVIGATION
-========================================================= */
-
-.navigation {
-    background: #fff;
-
-    border-bottom: 1px solid #e6e6e6;
-}
-
-.navigation-inner {
-    min-height: 52px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 5px;
-
-    overflow-x: auto;
-
-    scrollbar-width: none;
-}
-
-.navigation-inner::-webkit-scrollbar {
-    display: none;
-}
-
-.navigation a {
-    flex-shrink: 0;
-
-    font-size: 14px;
-
-    font-weight: 500;
-
-    padding: 17px 10px;
-
-    white-space: nowrap;
-
-    color: #333;
-
-    transition: .2s;
-}
-
-.navigation a:hover {
-    color: #ff6600;
-}
-
-.nav-arrow {
-    font-size: 11px;
-
-    margin-left: 3px;
-
-    color: #888;
-}
-
-
-/* =========================================================
-   WELCOME BAR
-========================================================= */
-
-.welcome {
-    background: #fff8ef;
-
-    padding: 9px 0;
-
-    font-size: 13px;
-
-    border-bottom: 1px solid #eee;
-}
-
-.welcome strong {
-    color: #ff6600;
-}
-
-.welcome a {
-    color: #ff6600;
-
-    font-weight: bold;
-
-    margin-left: 12px;
 }
 
 
@@ -681,19 +458,17 @@ img {
 
 .discount {
     position: absolute;
-
-    top: 18px;
-    left: 18px;
-
-    background: #ff6600;
-
-    color: #fff;
-
-    padding: 4px 7px;
-
-    font-size: 9px;
-
-    z-index: 2;
+    top: 12px;
+    right: 12px;
+    background: #fff;
+    color: #000;
+    border: 2px solid #000;
+    border-radius: 25px;
+    padding: 5px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 5;
+    white-space: nowrap;
 }
 
 .product-button {
@@ -1364,195 +1139,7 @@ img {
 <body>
 
 
-<!-- =========================================================
-     HEADER
-========================================================= -->
-
-<header class="header">
-
-<div class="container header-inner">
-
-
-    <!-- LOGO -->
-
-    <a href="index.php" class="logo">
-        Electro<span>Deals</span>
-    </a>
-
-
-    <!-- SEARCH -->
-
-    <div class="search-wrapper">
-
-        <form
-            action="products.php"
-            method="GET"
-            class="search-form"
-        >
-
-            <input
-                type="text"
-                name="search"
-                placeholder="Search for products..."
-            >
-
-            <button type="submit">
-                ⌕
-            </button>
-
-        </form>
-
-    </div>
-
-
-    <!-- LOGIN / CART -->
-
-    <div class="header-right">
-
-        <?php if ($is_logged_in): ?>
-
-            <a href="#" class="account">
-
-                <?php
-                echo htmlspecialchars($user_name);
-                ?>
-
-                <span class="account-arrow">
-                    ▼
-                </span>
-
-            </a>
-
-            <a
-                href="logout.php"
-                class="account"
-            >
-                Logout
-            </a>
-
-        <?php else: ?>
-
-            <a
-                href="login.php"
-                class="account"
-            >
-                Login / Register
-
-                <span class="account-arrow">
-                    ▼
-                </span>
-
-            </a>
-
-        <?php endif; ?>
-
-
-        <a
-            href="cart.php"
-            class="cart"
-            title="Shopping Cart"
-        >
-            🛒
-        </a>
-
-    </div>
-
-</div>
-
-</header>
-
-
-<!-- =========================================================
-     NAVIGATION
-========================================================= -->
-
-<nav class="navigation">
-
-<div class="container navigation-inner">
-
-    <a href="products.php?category=Audio">
-        Audio
-        <span class="nav-arrow">⌄</span>
-    </a>
-
-    <a href="products.php?category=Accessories">
-        Accessories
-        <span class="nav-arrow">⌄</span>
-    </a>
-
-    <a href="products.php?category=Desktops">
-        Desktops
-        <span class="nav-arrow">⌄</span>
-    </a>
-
-    <a href="products.php?category=Gaming">
-        Gaming
-        <span class="nav-arrow">⌄</span>
-    </a>
-
-    <a href="products.php?category=Laptops">
-        Laptops
-        <span class="nav-arrow">⌄</span>
-    </a>
-
-    <a href="products.php?category=Mobile">
-        Mobile
-        <span class="nav-arrow">⌄</span>
-    </a>
-
-    <a href="products.php?category=Peripherals">
-        Peripherals
-        <span class="nav-arrow">⌄</span>
-    </a>
-
-    <a href="products.php?category=Smart Home">
-        Smart Home
-        <span class="nav-arrow">⌄</span>
-    </a>
-
-    <a href="products.php?category=Smart Watches">
-        Smart Watches
-        <span class="nav-arrow">⌄</span>
-    </a>
-
-    <a href="products.php?category=Tablets">
-        Tablets
-        <span class="nav-arrow">⌄</span>
-    </a>
-
-</div>
-
-</nav>
-
-
-<!-- =========================================================
-     WELCOME
-========================================================= -->
-
-<?php if ($is_logged_in): ?>
-
-<div class="welcome">
-
-    <div class="container">
-
-        Welcome,
-        <strong>
-            <?php echo htmlspecialchars($user_name); ?>
-        </strong>
-
-        <?php if ($user_role === 'admin'): ?>
-
-            <a href="admin/dashboard.php">
-                Admin Dashboard
-            </a>
-
-        <?php endif; ?>
-
-    </div>
-
-</div>
-
-<?php endif; ?>
+<?php include_once __DIR__ . '/navbar.php'; ?>
 
 
 <!-- =========================================================
@@ -1716,10 +1303,10 @@ img {
                     <div class="product-name">
                         Performance Laptop 15
                     </div>
+                    
+                    <span class="discount">🔥 22% OFF</span>
 
-                    <div class="product-price">
-                        Rs. 85,000
-                    </div>
+                    <?php displayDiscountedPrice(85000, 22); ?>
 
                     <button
                         class="product-button"
@@ -1803,9 +1390,9 @@ img {
                         Premium Android Smartphone
                     </div>
 
-                    <div class="product-price">
-                        Rs. 45,000
-                    </div>
+                    <span class="discount">🔥 40% OFF</span>
+
+                    <?php displayDiscountedPrice(100000, 40); ?>
 
                     <button
                         class="product-button"
@@ -1900,6 +1487,7 @@ img {
      SHOP BY CATEGORY
 ========================================================= -->
 
+
 <section class="category-section">
 
 <div class="container">
@@ -1920,7 +1508,7 @@ img {
             <div class="category-image">
 
                 <img
-                    src="assets/images/category-audio.jpg"
+                    src="Images/audio.jpg"
                     alt="Audio"
                 >
 
@@ -1939,7 +1527,7 @@ img {
             <div class="category-image">
 
                 <img
-                    src="assets/images/category-accessories.jpg"
+                    src="Images/accessories.jpg"
                     alt="Accessories"
                 >
 
@@ -1958,7 +1546,7 @@ img {
             <div class="category-image">
 
                 <img
-                    src="assets/images/category-desktop.jpg"
+                    src="Images/desktop.jpg"
                     alt="Desktops"
                 >
 
@@ -1977,7 +1565,7 @@ img {
             <div class="category-image">
 
                 <img
-                    src="assets/images/category-gaming.jpg"
+                    src="Images/gaming1.jpg"
                     alt="Gaming"
                 >
 
@@ -1996,7 +1584,7 @@ img {
             <div class="category-image">
 
                 <img
-                    src="assets/images/category-laptop.jpg"
+                    src="Images/laptop3.jpg"
                     alt="Laptops"
                 >
 
@@ -2015,7 +1603,7 @@ img {
             <div class="category-image">
 
                 <img
-                    src="assets/images/category-mobile.jpg"
+                    src="Images/mobile2.jpg"
                     alt="Mobile"
                 >
 
@@ -2066,7 +1654,7 @@ img {
             <div class="product-image">
 
                 <img
-                    src="assets/images/audio-1.jpg"
+                    src="Images/audio-1.jpg"
                     alt="Wireless Earbuds"
                 >
 
@@ -2101,9 +1689,10 @@ img {
         <div class="product-card">
 
             <div class="product-image">
+                <span class="discount">🔥 22% OFF</span>
 
                 <img
-                    src="assets/images/audio-2.jpg"
+                    src="Images/audio-2.jpg"
                     alt="Bluetooth Speaker"
                 >
 
@@ -2140,7 +1729,7 @@ img {
             <div class="product-image">
 
                 <img
-                    src="assets/images/audio-3.jpg"
+                    src="Images/audio-3.jpg"
                     alt="Gaming Headset"
                 >
 
@@ -2177,7 +1766,7 @@ img {
             <div class="product-image">
 
                 <img
-                    src="assets/images/product-watch.jpg"
+                    src="Images/watch.jpg"
                     alt="Smart Watch"
                 >
 

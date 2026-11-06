@@ -1,0 +1,158 @@
+/* ==============================
+   ElectroDeals Dashboard
+   Orange + Black + White
+   ============================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    color: #111111;
+    min-height: 100vh;
+}
+
+/* Main Dashboard Container */
+
+.dashboard-container {
+    width: 90%;
+    max-width: 900px;
+    margin: 60px auto;
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 15px;
+    padding: 45px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+}
+
+/* Logo */
+
+.dashboard-container h1 {
+    font-size: 38px;
+    font-weight: 800;
+    color: #111111;
+    margin-bottom: 8px;
+}
+
+.dashboard-container h1 span {
+    color: #f57c00;
+}
+
+/* Dashboard Heading */
+
+.dashboard-container h2 {
+    font-size: 28px;
+    color: #111111;
+    margin-bottom: 25px;
+    border-left: 5px solid #f57c00;
+    padding-left: 12px;
+}
+
+/* Information */
+
+.dashboard-container p {
+    font-size: 16px;
+    color: #555555;
+    background: #fafafa;
+    border: 1px solid #eeeeee;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+}
+
+.dashboard-container p strong {
+    color: #111111;
+}
+
+/* Dashboard Links */
+
+.dashboard-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.dashboard-links a {
+    display: inline-block;
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+/* Home Button */
+
+.dashboard-links a:first-child {
+    background: #f57c00;
+    color: #ffffff;
+}
+
+.dashboard-links a:first-child:hover {
+    background: #d96500;
+    transform: translateY(-2px);
+}
+
+/* Logout Button */
+
+.dashboard-links a:last-child {
+    background: #111111;
+    color: #ffffff;
+}
+
+.dashboard-links a:last-child:hover {
+    background: #333333;
+    transform: translateY(-2px);
+}
+
+/* Top Orange Line */
+
+.dashboard-container::before {
+    content: "";
+    display: block;
+    width: 70px;
+    height: 5px;
+    background: #f57c00;
+    border-radius: 5px;
+    margin-bottom: 25px;
+}
+
+/* ==============================
+   Responsive Design
+   ============================== */
+
+@media (max-width: 600px) {
+
+    .dashboard-container {
+        width: 92%;
+        margin: 30px auto;
+        padding: 25px 20px;
+    }
+
+    .dashboard-container h1 {
+        font-size: 30px;
+    }
+
+    .dashboard-container h2 {
+        font-size: 23px;
+    }
+
+    .dashboard-container p {
+        font-size: 14px;
+    }
+
+    .dashboard-links {
+        flex-direction: column;
+    }
+
+    .dashboard-links a {
+        text-align: center;
+        width: 100%;
+    }
+}

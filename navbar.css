@@ -1,3 +1,58 @@
+.ed-header {
+    margin-bottom: 0;
+}
+
+.ed-navigation {
+    margin-bottom: 0;
+}
+
+.orders-container h2 {
+    margin-top: 5px;
+}
+/* =========================================
+   HEADER TEXT SIZE FIX
+========================================= */
+
+.ed-header-right{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:12px;
+}
+
+
+.ed-account,
+.ed-header-right{
+    display:flex;
+    align-items:center;
+    gap:10px; /* reduced from 22px */
+}
+
+.ed-orders{
+    margin:0;
+    padding:0 4px;
+}
+
+
+.ed-account:hover,
+.ed-orders:hover {
+    color: #ff6600;
+}
+
+/* Logo */
+.ed-logo {
+    font-size: 30px;
+    font-weight: 600;
+}
+
+/* Navigation text */
+.ed-navigation-inner > a,
+.ed-navigation-inner .ed-nav-link,
+.ed-navigation-inner > li > a {
+    font-size: 15px;
+    font-weight: 500;
+}
+
 /* =========================================================
    ELECTRODEALS NAVBAR CSS
 ========================================================= */
@@ -13,29 +68,117 @@
 }
 
 
-/* =========================================================
+/* ==========================================
    HEADER
-========================================================= */
+========================================== */
 
 .ed-header {
     width: 100%;
     background: #ffffff;
     border-bottom: 1px solid #e5e5e5;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
 .ed-header-inner {
-    min-height: 82px;
-
     display: grid;
-
-    grid-template-columns:
-        190px
-        minmax(0, 1fr)
-        230px;
-
+    grid-template-columns: 240px 1fr auto;
     align-items: center;
-
     gap: 25px;
+    min-height: 85px;
+}
+
+/* ==========================================
+   LOGO
+========================================== */
+
+.ed-logo {
+    font-size: 38px;
+    font-weight: 300;
+    text-decoration: none;
+    color: #444;
+    display: flex;
+    align-items: center;
+}
+
+.ed-logo span {
+    color: #ff6600;
+    font-weight: 700;
+}
+
+/* ==========================================
+   SEARCH
+========================================== */
+
+.ed-search-wrapper {
+    width: 100%;
+}
+
+.ed-search-form {
+    display: flex;
+    width: 100%;
+    height: 56px;
+    background: #f5f5f7;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.ed-search-form input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 0 22px;
+    font-size: 17px;
+    outline: none;
+}
+
+.ed-search-form button {
+    width: 70px;
+    border: none;
+    background: #ff6600;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.ed-search-form button:hover {
+    background: #e55b00;
+}
+
+/* ==========================================
+   RIGHT MENU
+========================================== */
+
+.ed-header-right {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.ed-account,
+.ed-orders {
+    text-decoration: none;
+    color: #111;
+    font-size: 15px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.ed-account:hover,
+.ed-orders:hover {
+    color: #ff6600;
+}
+
+.ed-cart {
+    font-size: 34px;
+    color: #111;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.ed-cart:hover {
+    color: #ff6600;
 }
 
 
@@ -705,3 +848,4 @@
 .ed-submenu-menu {
     z-index: 9999;
 }
+

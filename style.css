@@ -1,4 +1,701 @@
+/* =========================================
+   PRODUCT STOCK QUANTITY
+========================================= */
 
+.stock-info {
+    margin: 5px 0;
+}
+
+.stock-available {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #16834a;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.stock-dot {
+    width: 8px;
+    height: 8px;
+    background: #16a34a;
+    border-radius: 50%;
+}
+
+.stock-unavailable {
+    display: inline-block;
+    color: #dc3545;
+    font-size: 12px;
+    font-weight: 700;
+    background: #fff0f0;
+    padding: 5px 9px;
+    border-radius: 4px;
+}
+/* =========================================
+   PRODUCT CARD DISCOUNT LAYOUT
+========================================= */
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #eeeeee;
+    transition: 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.09);
+}
+
+/* Image section */
+
+.card .thumb {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 220px;
+    padding: 15px;
+    background: #f8f9fb;
+    overflow: hidden;
+}
+
+.card .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Discount badge */
+
+.discount-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #e63946;
+    color: white;
+    padding: 7px 11px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 5px;
+    z-index: 5;
+}
+
+/* Product details */
+
+.card .body {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.product-pricing {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.price-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.current-price {
+    font-size: 19px;
+    font-weight: 800;
+    color: #d6334f;
+}
+
+.old-price {
+    font-size: 13px;
+    color: #999;
+    text-decoration: line-through;
+}
+
+.saving-text {
+    font-size: 12px;
+    color: #16834a;
+    font-weight: 600;
+}
+
+.card .name {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+    text-decoration: none;
+    line-height: 1.5;
+}
+
+.card .row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.card .row form {
+    flex: 1;
+}
+
+.card .row form button {
+    width: 100%;
+}
+
+.card .heart {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 6;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #1f2937;
+}
+
+
+/* =========================================
+   AUTHENTICATION PAGE
+========================================= */
+
+.auth-page {
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f4f7fb,
+            #e8eef7
+        );
+
+    padding: 30px;
+}
+
+
+.auth-container {
+    width: 100%;
+    max-width: 480px;
+}
+
+
+.auth-card {
+    background: #ffffff;
+
+    padding: 40px;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.08);
+
+    border: 1px solid #e5e7eb;
+}
+
+
+.auth-logo {
+    text-align: center;
+
+    margin-bottom: 30px;
+}
+
+
+.auth-logo h1 {
+    font-size: 32px;
+
+    font-weight: 800;
+
+    color: #111827;
+}
+
+
+.auth-logo h1 span {
+    color: #f59e0b;
+}
+
+
+.auth-logo p {
+    color: #6b7280;
+
+    font-size: 14px;
+
+    margin-top: 8px;
+}
+
+
+.auth-card h2 {
+    font-size: 26px;
+
+    margin-bottom: 6px;
+
+    color: #111827;
+}
+
+
+.auth-subtitle {
+    color: #6b7280;
+
+    margin-bottom: 25px;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.form-group {
+    margin-bottom: 19px;
+}
+
+
+.form-group label {
+    display: block;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    margin-bottom: 7px;
+
+    color: #374151;
+}
+
+
+.form-group input {
+    width: 100%;
+
+    height: 48px;
+
+    padding: 0 14px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 9px;
+
+    outline: none;
+
+    font-size: 15px;
+
+    transition: 0.2s;
+}
+
+
+.form-group input:focus {
+    border-color: #f59e0b;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(245, 158, 11, 0.12);
+}
+
+
+.password-help {
+    display: block;
+
+    color: #6b7280;
+
+    font-size: 12px;
+
+    margin-top: 6px;
+
+    line-height: 1.5;
+}
+
+
+.error-text {
+    display: block;
+
+    color: #dc2626;
+
+    font-size: 12px;
+
+    margin-top: 6px;
+}
+
+
+/* =========================================
+   BUTTON
+========================================= */
+
+.btn-primary {
+    border: none;
+
+    background: #f59e0b;
+
+    color: #111827;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    padding: 13px 20px;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.btn-primary:hover {
+    background: #d97706;
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+
+.btn-full {
+    width: 100%;
+
+    margin-top: 5px;
+}
+
+
+/* =========================================
+   ALERT
+========================================= */
+
+.alert {
+    padding: 12px 14px;
+
+    border-radius: 8px;
+
+    margin-bottom: 20px;
+
+    font-size: 14px;
+}
+
+
+.alert-error {
+    background: #fef2f2;
+
+    color: #b91c1c;
+
+    border: 1px solid #fecaca;
+}
+
+
+/* =========================================
+   AUTH FOOTER
+========================================= */
+
+.auth-footer {
+    text-align: center;
+
+    margin-top: 25px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #e5e7eb;
+
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+
+.auth-footer a {
+    color: #d97706;
+
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 550px) {
+
+    .auth-page {
+        padding: 15px;
+    }
+
+    .auth-card {
+        padding: 25px 20px;
+    }
+
+    .auth-logo h1 {
+        font-size: 28px;
+    }
+
+}
+/* =========================================
+   AUTHENTICATION
+========================================= */
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f7f7f7,
+            #eeeeee
+        );
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 480px;
+}
+
+.auth-card {
+    background: #ffffff;
+    padding: 38px;
+    border-radius: 18px;
+
+    border: 1px solid #e5e7eb;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,0.08);
+}
+
+.auth-logo {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.auth-logo h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #111111;
+}
+
+.auth-logo h1 span {
+    color: #f59e0b;
+}
+
+.auth-logo p {
+    margin-top: 6px;
+    color: #777777;
+    font-size: 14px;
+}
+
+.auth-card h2 {
+    color: #111111;
+    margin-bottom: 6px;
+}
+
+.auth-subtitle {
+    color: #777777;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.form-group input {
+    width: 100%;
+    height: 46px;
+
+    padding: 0 13px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition: 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #f59e0b;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(245,158,11,0.12);
+}
+
+.password-help {
+    display: block;
+    margin-top: 6px;
+
+    color: #777777;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.error-text {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #dc2626;
+    font-size: 12px;
+}
+
+.btn-primary {
+    border: none;
+
+    background: #f59e0b;
+    color: #111111;
+
+    font-weight: 700;
+
+    padding: 13px 20px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.btn-primary:hover {
+    background: #d97706;
+    color: #ffffff;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.alert {
+    padding: 12px;
+    margin-bottom: 18px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+}
+
+.alert-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+}
+
+.auth-footer {
+    text-align: center;
+
+    margin-top: 22px;
+    padding-top: 18px;
+
+    border-top: 1px solid #eeeeee;
+
+    font-size: 14px;
+    color: #777777;
+}
+
+.auth-footer a {
+    color: #d97706;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 500px) {
+
+    .auth-card {
+        padding: 25px 20px;
+    }
+
+    .auth-logo h1 {
+        font-size: 27px;
+    }
+
+}
+.dashboard-container {
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.dashboard-container h1 {
+    color: #111;
+    margin-bottom: 10px;
+}
+
+.dashboard-container h1 span {
+    color: #f59e0b;
+}
+
+.dashboard-container h2 {
+    margin: 20px 0 10px;
+    color: #222;
+}
+
+.dashboard-container p {
+    color: #555;
+    margin: 8px 0;
+}
+
+.dashboard-links {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.dashboard-links a {
+    display: inline-block;
+    padding: 12px 20px;
+    background: #f59e0b;
+    color: #111;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+.dashboard-links a:hover {
+    background: #d97706;
+    color: #fff;
+}
 /* =========================================================
    shop.css
    ElectroDeals - Online Electronic Store

@@ -59,13 +59,21 @@ try {
     $offset = ($page - 1) * $perPage;
  
     $st = $pdo->prepare("
-        SELECT p.id, p.name, p.brand, p.price, p.stock, p.image, c.name AS category_name
-        FROM products p
-        LEFT JOIN categories c ON c.id = p.category_id
-        WHERE $whereSql
-        ORDER BY $orderBy
-        LIMIT $perPage OFFSET $offset
-    ");
+    SELECT
+        p.id,
+        p.name,
+        p.brand,
+        p.price,
+        p.discount_percentage,
+        p.stock,
+        p.image,
+        c.name AS category_name
+    FROM products p
+    LEFT JOIN categories c ON c.id = p.category_id
+    WHERE $whereSql
+    ORDER BY $orderBy
+    LIMIT $perPage OFFSET $offset
+");
     $st->execute($params);
     $products = $st->fetchAll();
  
@@ -186,29 +194,170 @@ $flash = $_SESSION["flash"] ?? null; unset($_SESSION["flash"]);
             </div>
  
             <div class="grid" id="grid">
-            <?php if ($products): foreach ($products as $p): $out = (int)$p["stock"] <= 0; ?>
+                <?php if ($products): foreach ($products as $p):
+
+    $out = (int)$p["stock"] <= 0;
+
+    // Original product price
+    $originalPrice = (float)$p["price"];
+
+    // Discount percentage
+    $discount = max(0, min(100, (float)$p["discount_percentage"]));
+
+    // Calculate discounted price
+    $discountedPrice = $originalPrice -
+                       ($originalPrice * $discount / 100);
+
+?>
                 <article class="card">
-                    <a class="thumb" href="products_details.php?id=<?= (int)$p["id"] ?>">
-                        <img src="<?= e($p["image"]) ?>" alt="<?= e($p["name"]) ?>" loading="lazy"
-                             onerror="this.onerror=null;this.src='Images/laptop.jpg'">
-                        <?php if ($out): ?><span class="badge-out">Out of stock</span><?php endif; ?>
-                        <button type="button" class="heart" data-id="<?= (int)$p["id"] ?>" aria-label="Add to wishlist">♡</button>
-                    </a>
-                    <div class="body">
-                        <div class="price">Rs. <?= number_format((float)$p["price"]) ?></div>
-                        <a class="name" href="products_details.php?id=<?= (int)$p["id"] ?>"><?= e($p["name"]) ?></a>
-                        <div class="row">
-                            <form method="POST" action="cart.php">
-                                <input type="hidden" name="action" value="add">
-                                <input type="hidden" name="product_id" value="<?= (int)$p["id"] ?>">
-                                <input type="hidden" name="quantity" value="1">
-                                <input type="hidden" name="back" value="<?= e($_SERVER["REQUEST_URI"]) ?>">
-                                <button class="btn btn-red" <?= $out ? "disabled" : "" ?>>🛒 Add To Cart</button>
-                            </form>
-                            <a class="btn btn-ghost" title="View details" href="products_details.php?id=<?= (int)$p["id"] ?>">👁</a>
-                        </div>
-                    </div>
-                </article>
+
+    <a class="thumb"
+       href="products_details.php?id=<?= (int)$p["id"] ?>">
+
+        <img
+            src="<?= e($p["image"]) ?>"
+            alt="<?= e($p["name"]) ?>"
+            loading="lazy"
+            onerror="this.onerror=null;this.src='Images/laptop.jpg'"
+        >
+
+        <!-- Discount Badge - Top Right -->
+        <?php if ($discount > 0): ?>
+
+            <span class="discount-badge">
+                <?= rtrim(rtrim(number_format($discount, 2), '0'), '.') ?>% OFF
+            </span>
+
+        <?php endif; ?>
+
+        <!-- Out of Stock -->
+        <?php if ($out): ?>
+
+            <span class="badge-out">
+                Out of stock
+            </span>
+
+        <?php endif; ?>
+
+        <!-- Wishlist -->
+        <button
+            type="button"
+            class="heart"
+            data-id="<?= (int)$p["id"] ?>"
+            aria-label="Add to wishlist"
+        >
+            ♡
+        </button>
+
+    </a>
+
+
+    <div class="body">
+        <!-- Stock Availability -->
+<div class="stock-info">
+
+    <?php if ((int)$p["stock"] > 0): ?>
+
+        <span class="stock-available">
+            <span class="stock-dot"></span>
+            In Stock (<?= (int)$p["stock"] ?> available)
+        </span>
+
+    <?php else: ?>
+
+        <span class="stock-unavailable">
+            Out of Stock
+        </span>
+
+    <?php endif; ?>
+
+</div>
+
+        <!-- Product Price -->
+        <div class="product-pricing">
+
+            <?php if ($discount > 0): ?>
+
+                <div class="price-row">
+
+                    <span class="current-price">
+                        Rs. <?= number_format($discountedPrice, 2) ?>
+                    </span>
+
+                    <span class="old-price">
+                        Rs. <?= number_format($originalPrice, 2) ?>
+                    </span>
+
+                </div>
+
+                <div class="saving-text">
+                    You save Rs.
+                    <?= number_format($originalPrice - $discountedPrice, 2) ?>
+                </div>
+
+            <?php else: ?>
+
+                <div class="price-row">
+
+                    <span class="current-price">
+                        Rs. <?= number_format($originalPrice, 2) ?>
+                    </span>
+
+                </div>
+
+            <?php endif; ?>
+
+        </div>
+
+
+        <!-- Product Name -->
+        <a class="name"
+           href="products_details.php?id=<?= (int)$p["id"] ?>">
+
+            <?= e($p["name"]) ?>
+
+        </a>
+
+
+        <!-- Product Buttons -->
+        <div class="row">
+
+            <form method="POST" action="add_to_cart.php">
+
+    <input type="hidden"
+           name="product_id"
+           value="<?= (int)$p["id"] ?>">
+
+    <input type="hidden"
+           name="quantity"
+           value="1">
+
+    <input type="hidden"
+           name="back"
+           value="products.php">
+
+    <button type="submit"
+            class="btn btn-red"
+            <?= $out ? "disabled" : "" ?>>
+        🛒 Add To Cart
+    </button>
+
+</form>
+
+
+            <a
+                class="btn btn-ghost"
+                title="View details"
+                href="products_details.php?id=<?= (int)$p["id"] ?>"
+            >
+                👁
+            </a>
+
+        </div>
+
+    </div>
+
+</article>
             <?php endforeach; else: ?>
                 <div class="empty">
                     <h3>No products found</h3>

@@ -86,7 +86,7 @@ $user_role    = $_SESSION['role'] ?? '';
 
             <?php endif; ?>
 
-
+            <a href="my_orders.php" class="ed-orders">My Orders</a>
             <a
                 href="cart.php"
                 class="ed-cart"

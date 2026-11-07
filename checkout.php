@@ -157,20 +157,62 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 VALUES (?, ?, ?, ?, ?)
             ");
 
-            foreach ($currentItems as $item) {
+            /* Save order items and reduce product stock */
 
-                $quantity = (int)$item["quantity"];
-                $price = (float)$item["price"];
-                $lineTotal = $price * $quantity;
+$insertItem = $pdo->prepare("
+    INSERT INTO order_items
+    (order_id, product_id, quantity, price, subtotal)
+    VALUES (?, ?, ?, ?, ?)
+");
 
-                $insertItem->execute([
-                    $orderId,
-                    $item["id"],
-                    $quantity,
-                    $price,
-                    $lineTotal
-                ]);
-            }
+$updateStock = $pdo->prepare("
+    UPDATE products
+    SET stock = stock - ?
+    WHERE id = ?
+    AND stock >= ?
+");
+
+foreach ($currentItems as $item) {
+
+    $productId = (int)$item["id"];
+    $quantity = (int)$item["quantity"];
+    $price = (float)$item["price"];
+
+    $lineTotal = $price * $quantity;
+
+    /* Insert order item */
+
+    $insertItem->execute([
+        $orderId,
+        $productId,
+        $quantity,
+        $price,
+        $lineTotal
+    ]);
+
+    /* Reduce available stock */
+
+    $updateStock->execute([
+        $quantity,
+        $productId,
+        $quantity
+    ]);
+
+    if ($updateStock->rowCount() !== 1) {
+        throw new Exception(
+            "Insufficient stock for " . $item["name"]
+        );
+    }
+}
+
+/* Clear customer's cart after successful order */
+
+$stmt = $pdo->prepare("
+    DELETE FROM cart
+    WHERE customer_id = ?
+");
+
+$stmt->execute([$uid]);
 
             $pdo->commit();
 

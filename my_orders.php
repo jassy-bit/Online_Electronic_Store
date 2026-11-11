@@ -44,7 +44,6 @@ $stmt->execute([$uid]);
 
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-require_once "navbar.php";
 
 ?>
 
@@ -136,6 +135,7 @@ require_once "navbar.php";
 </head>
 
 <body>
+    <?php require_once "navbar.php"; ?>
 
 <div class="orders-container">
 

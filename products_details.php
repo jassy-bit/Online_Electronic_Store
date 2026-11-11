@@ -7,7 +7,6 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once "auth.php";
 require_once "database.php";
-require_once "navbar.php";
  
 function e($v) { return htmlspecialchars((string)$v, ENT_QUOTES, "UTF-8"); }
  

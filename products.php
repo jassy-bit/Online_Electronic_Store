@@ -5,7 +5,6 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once "auth.php";
 require_once "database.php";
-require_once "navbar.php";
  
 /* ---------- read filters ---------- */
 $search   = trim($_GET["search"] ?? "");

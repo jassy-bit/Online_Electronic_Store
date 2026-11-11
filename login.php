@@ -1,27 +1,39 @@
+
 <?php
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 require_once "database.php";
-require_once "validation.php";
 
 /* =========================================
-   Redirect if already logged in
-   ========================================= */
+   Escape Output
+========================================= */
+
+function login_e($value) {
+    return htmlspecialchars((string)$value, ENT_QUOTES, "UTF-8");
+}
+
+/* =========================================
+   Redirect Already Logged-In Users
+========================================= */
 
 if (isset($_SESSION["user_id"])) {
 
-    if ($_SESSION["role"] === "admin") {
+    $role = $_SESSION["role"] ?? "";
+
+    if ($role === "admin") {
         header("Location: admin/dashboard.php");
         exit;
     }
 
-    if ($_SESSION["role"] === "supplier") {
+    if ($role === "supplier") {
         header("Location: supplier/dashboard.php");
         exit;
     }
 
-    if ($_SESSION["role"] === "customer") {
+    if ($role === "customer") {
         header("Location: index.php");
         exit;
     }
@@ -32,16 +44,14 @@ $error = "";
 
 /* =========================================
    Login Processing
-   ========================================= */
+========================================= */
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $email = strtolower(trim($_POST["email"] ?? ""));
     $password = $_POST["password"] ?? "";
 
-    /* =========================================
-       Validation
-       ========================================= */
+    /* Validation */
 
     if ($email === "") {
 
@@ -56,82 +66,75 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $error = "Password is required.";
     }
 
-    /* =========================================
-       Find User
-       ========================================= */
+    /* Find User */
 
     if ($error === "") {
 
-        $stmt = $pdo->prepare(
-            "SELECT id, name, email, password, role, status
-             FROM users
-             WHERE email = ?
-             LIMIT 1"
-        );
+        $stmt = $pdo->prepare("
+            SELECT
+                id,
+                name,
+                email,
+                password,
+                role,
+                status
+            FROM users
+            WHERE email = ?
+            LIMIT 1
+        ");
 
         $stmt->execute([$email]);
 
-        $user = $stmt->fetch();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        /* =========================================
-           Check Login
-           ========================================= */
+        /* Verify Credentials */
 
         if (!$user || !password_verify($password, $user["password"])) {
 
             $error = "Invalid email or password.";
 
+        } elseif ($user["status"] === "pending" && $user["role"] === "supplier") {
+
+            $error = "Your supplier registration is awaiting admin approval. Please try again after approval.";
+
         } elseif ($user["status"] !== "active") {
 
-            $error = "Your account is not active. Please contact the administrator.";
+            $error = "Your account is inactive. Please contact the administrator.";
 
         } else {
 
-            /* =========================================
-               Create Secure Session
-               ========================================= */
+            /* Secure Session */
 
             session_regenerate_id(true);
 
-            $_SESSION["user_id"] = $user["id"];
+            $_SESSION["user_id"] = (int)$user["id"];
             $_SESSION["user_name"] = $user["name"];
             $_SESSION["user_email"] = $user["email"];
             $_SESSION["role"] = $user["role"];
 
-            /* =========================================
-               Get IP Address
-               ========================================= */
+            /* Get IP Address */
 
             $ip_address = $_SERVER["REMOTE_ADDR"] ?? "127.0.0.1";
-
-            /*
-             * When using localhost on Windows/XAMPP,
-             * PHP may return ::1.
-             * Convert IPv6 localhost to IPv4 localhost.
-             */
 
             if ($ip_address === "::1") {
                 $ip_address = "127.0.0.1";
             }
 
-            /* =========================================
-               Record Admin Login Activity
-               ========================================= */
+            /* Admin Activity Logging */
 
             if ($user["role"] === "admin") {
 
                 try {
 
-                    $activity = $pdo->prepare(
-                        "INSERT INTO admin_activity
-                        (
+                    $activity = $pdo->prepare("
+                        INSERT INTO admin_activity (
                             admin_id,
                             action,
                             description,
                             ip_address
                         )
-                        VALUES (?, ?, ?, ?)"
-                    );
+                        VALUES (?, ?, ?, ?)
+                    ");
 
                     $activity->execute([
                         $user["id"],
@@ -142,17 +145,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 } catch (PDOException $e) {
 
-                    /*
-                     * Login should still work even if
-                     * activity logging fails.
-                     */
+                    error_log("Admin activity logging error: " . $e->getMessage());
 
                 }
             }
 
-            /* =========================================
-               Role-Based Redirect
-               ========================================= */
+            /* Role-Based Redirect */
 
             if ($user["role"] === "admin") {
 
@@ -171,7 +169,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             } else {
 
-                header("Location: index.php");
+                // Unknown roles must not receive dashboard access.
+                session_unset();
+                session_destroy();
+
+                header("Location: login.php");
                 exit;
             }
         }
@@ -194,6 +196,153 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <link rel="stylesheet" href="style.css">
 
+    <style>
+
+        .auth-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px 15px;
+            background: #f5f5f5;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .auth-card {
+            background: #fff;
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .auth-logo h1 {
+            font-size: 32px;
+            color: #222;
+        }
+
+        .auth-logo h1 span {
+            color: #f58220;
+        }
+
+        .auth-logo p {
+            color: #777;
+            font-size: 13px;
+        }
+
+        .auth-card h2 {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .auth-subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 14px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #f58220;
+            box-shadow: 0 0 0 3px rgba(245,130,32,0.12);
+        }
+
+        .alert {
+            padding: 13px;
+            border-radius: 7px;
+            margin-bottom: 18px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .alert-error {
+            color: #842029;
+            background: #f8d7da;
+            border: 1px solid #f5c2c7;
+        }
+
+        .alert-success {
+            color: #0f5132;
+            background: #d1e7dd;
+            border: 1px solid #badbcc;
+        }
+
+        .btn-primary {
+            background: #f58220;
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: 7px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #df6e0c;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .auth-footer a {
+            color: #f58220;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        @media (max-width: 480px) {
+
+            .auth-card {
+                padding: 25px 18px;
+            }
+
+            .auth-logo h1 {
+                font-size: 27px;
+            }
+
+        }
+
+    </style>
+
 </head>
 
 <body class="auth-page">
@@ -202,7 +351,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <div class="auth-card">
 
-        <!-- Logo -->
+        <!-- LOGO -->
 
         <div class="auth-logo">
 
@@ -216,43 +365,37 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         </div>
 
-        <!-- Login Heading -->
-
         <h2>Login</h2>
 
         <p class="auth-subtitle">
             Login to your ElectroDeals account
         </p>
 
-        <!-- Error Message -->
+        <!-- ERROR MESSAGE -->
 
         <?php if ($error !== ""): ?>
 
             <div class="alert alert-error">
-
-                <?= htmlspecialchars($error) ?>
-
+                <?= login_e($error) ?>
             </div>
 
         <?php endif; ?>
 
-        <!-- Success Message -->
+        <!-- SUCCESS MESSAGE -->
 
         <?php if (isset($_SESSION["success"])): ?>
 
             <div class="alert alert-success">
-
-                <?= htmlspecialchars($_SESSION["success"]) ?>
-
+                <?= login_e($_SESSION["success"]) ?>
             </div>
 
             <?php unset($_SESSION["success"]); ?>
 
         <?php endif; ?>
 
-        <!-- Login Form -->
+        <!-- LOGIN FORM -->
 
-        <form method="POST" novalidate>
+        <form method="POST" action="" novalidate>
 
             <div class="form-group">
 
@@ -264,7 +407,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     type="email"
                     id="email"
                     name="email"
-                    value="<?= htmlspecialchars($email) ?>"
+                    value="<?= login_e($email) ?>"
                     placeholder="Enter your email"
                     maxlength="150"
                     required
@@ -291,15 +434,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <button
                 type="submit"
-                class="btn-primary btn-full">
-
+                class="btn-primary btn-full"
+            >
                 Login
-
             </button>
 
         </form>
-
-        <!-- Register -->
 
         <div class="auth-footer">
 
@@ -316,5 +456,4 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </div>
 
 </body>
-
 </html>

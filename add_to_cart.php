@@ -1,223 +1,101 @@
-
 <?php
-/*
-|--------------------------------------------------------------------------
-| ADD TO CART - ELECTRODEALS
-|--------------------------------------------------------------------------
-*/
-
+/* =========================================================
+   addtocart.php  -  adds a product to the logged-in customer's cart
+   • Called with fetch() by shop.js  -> returns JSON
+   • Called by a normal form submit  -> redirects back with a message
+========================================================= */
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
 require_once "auth.php";
 require_once "database.php";
-
-require_login();
-
-// Only customers can add products
-if (
-    !isset($_SESSION["user_id"]) ||
-    ($_SESSION["role"] ?? "") !== "customer"
-) {
-    $_SESSION["flash"] = [
-        "type" => "error",
-        "msg" => "Please login as a customer."
-    ];
-
-    header("Location: login.php");
+ 
+function wants_json(): bool {
+    return (($_SERVER["HTTP_X_REQUESTED_WITH"] ?? "") === "fetch")
+        || str_contains($_SERVER["HTTP_ACCEPT"] ?? "", "application/json");
+}
+ 
+/* only allow redirects to local pages */
+function safe_back($url, string $fallback): string {
+    if (is_string($url) && preg_match('#^[A-Za-z0-9_\-]+\.php(\?[^\s]*)?$#', $url)) return $url;
+    if (is_string($url) && preg_match('#^/[^/\\\\][^\s]*$#', $url)) return $url;
+    return $fallback;
+}
+ 
+function finish(bool $ok, string $message, string $redirect, array $extra = [], int $status = 200): void {
+    if (wants_json()) {
+        http_response_code($status);
+        header("Content-Type: application/json; charset=utf-8");
+        echo json_encode(array_merge(["ok" => $ok, "message" => $message], $extra));
+        exit;
+    }
+    $_SESSION["flash"] = ["type" => $ok ? "ok" : "err", "msg" => $message];
+    header("Location: " . $redirect);
     exit;
 }
-
-// Customer ID
-$customer_id = (int) $_SESSION["user_id"];
-
-// Only POST requests
+ 
+$back = safe_back($_POST["back"] ?? "", "products.php");
+ 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: products.php");
     exit;
 }
-
-// Get submitted values
-$product_id = (int) ($_POST["product_id"] ?? 0);
-$quantity = (int) ($_POST["quantity"] ?? 1);
-
-$quantity = max(1, $quantity);
-
-// Return location
-$back = $_POST["back"] ?? "products.php";
-
-// Prevent external redirects
-if (
-    !is_string($back) ||
-    (
-        !str_starts_with($back, "/online_electronic_store/") &&
-        !in_array($back, ["products.php", "index.php"], true)
-    )
-) {
-    $back = "products.php";
+ 
+/* must be signed in */
+if (empty($_SESSION["user_id"])) {
+    finish(false, "Please log in to add items to your cart.", "login.php", ["login" => "login.php"], 401);
 }
-
-// Validate product ID
-if ($product_id <= 0) {
-    $_SESSION["flash"] = [
-        "type" => "error",
-        "msg" => "Invalid product selected."
-    ];
-
-    header("Location: " . $back);
-    exit;
+/* only customers shop */
+if (($_SESSION["role"] ?? "") !== "customer") {
+    finish(false, "Only customer accounts can use the cart.", $back, [], 403);
 }
-
+ 
+$uid = (int)$_SESSION["user_id"];
+$pid = (int)($_POST["product_id"] ?? 0);
+$qty = max(1, (int)($_POST["quantity"] ?? 1));
+ 
+if ($pid <= 0) {
+    finish(false, "Invalid product.", $back, [], 400);
+}
+ 
 try {
-
-    // Start transaction
-    $pdo->beginTransaction();
-
-    // Get product information and lock product row
-    $stmt = $pdo->prepare("
-        SELECT
-            id,
-            name,
-            price,
-            stock,
-            status,
-            discount_percentage
-        FROM products
-        WHERE id = :product_id
-        FOR UPDATE
-    ");
-
-    $stmt->execute([
-        ":product_id" => $product_id
-    ]);
-
-    $product = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Check product availability
-    if (!$product || $product["status"] !== "active") {
-        throw new Exception("Product is unavailable.");
+    $st = $pdo->prepare("SELECT stock FROM products WHERE id = :id AND status = 'active'");
+    $st->execute([":id" => $pid]);
+    $stock = $st->fetchColumn();
+ 
+    if ($stock === false || (int)$stock <= 0) {
+        finish(false, "Sorry, this product is out of stock.", $back, [], 409);
     }
-
-    // Check stock
-    $available_stock = (int) $product["stock"];
-
-    if ($available_stock <= 0) {
-        throw new Exception("This product is out of stock.");
+    $stock = (int)$stock;
+ 
+    $st = $pdo->prepare("SELECT quantity FROM cart WHERE customer_id = :u AND product_id = :p");
+    $st->execute([":u" => $uid, ":p" => $pid]);
+    $have = (int)($st->fetchColumn() ?: 0);
+ 
+    $wanted = $have + $qty;
+    $new    = min($wanted, $stock);
+ 
+    $pdo->prepare("
+        INSERT INTO cart (customer_id, product_id, quantity) VALUES (:u, :p, :q)
+        ON DUPLICATE KEY UPDATE quantity = :q2
+    ")->execute([":u" => $uid, ":p" => $pid, ":q" => $new, ":q2" => $new]);
+ 
+    $st = $pdo->prepare("SELECT COALESCE(SUM(quantity),0) FROM cart WHERE customer_id = :u");
+    $st->execute([":u" => $uid]);
+    $count = (int)$st->fetchColumn();
+ 
+    /* "Buy now" from the detail page goes straight to the cart */
+    if (!empty($_POST["buy_now"]) && !wants_json()) {
+        header("Location: cart.php");
+        exit;
     }
-
-    // Find existing cart item
-    $stmt = $pdo->prepare("
-        SELECT id, quantity
-        FROM cart
-        WHERE customer_id = :customer_id
-        AND product_id = :product_id
-        FOR UPDATE
-    ");
-
-    $stmt->execute([
-        ":customer_id" => $customer_id,
-        ":product_id" => $product_id
-    ]);
-
-    $existing = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($existing) {
-
-        // Calculate updated quantity
-        $new_quantity = (int) $existing["quantity"] + $quantity;
-
-        // Validate stock
-        if ($new_quantity > $available_stock) {
-            throw new Exception(
-                "Only " . $available_stock .
-                " items are available in stock."
-            );
-        }
-
-        // Update existing cart record
-        $stmt = $pdo->prepare("
-            UPDATE cart
-            SET
-                quantity = :quantity,
-                updated_at = CURRENT_TIMESTAMP
-            WHERE id = :id
-            AND customer_id = :customer_id
-        ");
-
-        $stmt->execute([
-            ":quantity" => $new_quantity,
-            ":id" => $existing["id"],
-            ":customer_id" => $customer_id
-        ]);
-
-    } else {
-
-        // Validate requested quantity
-        if ($quantity > $available_stock) {
-            throw new Exception("Insufficient stock available.");
-        }
-
-        // Insert new cart record
-        $stmt = $pdo->prepare("
-            INSERT INTO cart (
-                customer_id,
-                product_id,
-                quantity,
-                created_at,
-                updated_at
-            )
-            VALUES (
-                :customer_id,
-                :product_id,
-                :quantity,
-                CURRENT_TIMESTAMP,
-                CURRENT_TIMESTAMP
-            )
-        ");
-
-        $stmt->execute([
-            ":customer_id" => $customer_id,
-            ":product_id" => $product_id,
-            ":quantity" => $quantity
-        ]);
-    }
-
-    // Commit transaction
-    $pdo->commit();
-
-    $_SESSION["flash"] = [
-        "type" => "success",
-        "msg" => $product["name"] .
-                 " added to your cart successfully."
-    ];
-
-} catch (PDOException $e) {
-
-    if ($pdo->inTransaction()) {
-        $pdo->rollBack();
-    }
-
-    error_log("Add to cart database error: " . $e->getMessage());
-
-    $_SESSION["flash"] = [
-        "type" => "error",
-        "msg" => "Unable to add product to cart. Please try again."
-    ];
-
-} catch (Exception $e) {
-
-    if ($pdo->inTransaction()) {
-        $pdo->rollBack();
-    }
-
-    $_SESSION["flash"] = [
-        "type" => "error",
-        "msg" => $e->getMessage()
-    ];
+ 
+    $msg = $new < $wanted
+        ? "Only $stock in stock — your cart now has $new."
+        : "Added to your cart.";
+    finish(true, $msg, $back, ["cart_count" => $count]);
+ 
+} catch (PDOException $ex) {
+    finish(false, "Something went wrong. Please try again.", $back, [], 500);
 }
-
-// Redirect
-header("Location: " . $back);
-exit;
-
+ 

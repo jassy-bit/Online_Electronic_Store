@@ -1,7 +1,21 @@
-/* ==============================
-   ElectroDeals Dashboard
-   Orange + Black + White
-   ============================== */
+
+/* =====================================
+   ELECTRODEALS SUPPLIER PANEL
+===================================== */
+
+:root {
+    --orange: #ff7900;
+    --orange-dark: #e56800;
+    --black: #171717;
+    --white: #ffffff;
+    --background: #f5f6f8;
+    --text: #252525;
+    --muted: #777;
+    --border: #e8e8e8;
+    --green: #16a36a;
+    --red: #e74c3c;
+    --sidebar-width: 255px;
+}
 
 * {
     margin: 0;
@@ -10,149 +24,603 @@
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #ffffff;
-    color: #111111;
-    min-height: 100vh;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--background);
+    color: var(--text);
 }
 
-/* Main Dashboard Container */
-
-.dashboard-container {
-    width: 90%;
-    max-width: 900px;
-    margin: 60px auto;
-    background: #ffffff;
-    border: 1px solid #e5e5e5;
-    border-radius: 15px;
-    padding: 45px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+a {
+    text-decoration: none;
+    color: inherit;
 }
 
-/* Logo */
-
-.dashboard-container h1 {
-    font-size: 38px;
-    font-weight: 800;
-    color: #111111;
-    margin-bottom: 8px;
+button, input, select, textarea {
+    font: inherit;
 }
 
-.dashboard-container h1 span {
-    color: #f57c00;
-}
+/* =====================================
+   SIDEBAR
+===================================== */
 
-/* Dashboard Heading */
-
-.dashboard-container h2 {
-    font-size: 28px;
-    color: #111111;
-    margin-bottom: 25px;
-    border-left: 5px solid #f57c00;
-    padding-left: 12px;
-}
-
-/* Information */
-
-.dashboard-container p {
-    font-size: 16px;
-    color: #555555;
-    background: #fafafa;
-    border: 1px solid #eeeeee;
-    border-radius: 8px;
-    padding: 14px 18px;
-    margin-bottom: 12px;
-}
-
-.dashboard-container p strong {
-    color: #111111;
-}
-
-/* Dashboard Links */
-
-.dashboard-links {
+.supplier-sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: var(--black);
+    color: white;
+    padding: 25px 17px;
     display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    overflow-y: auto;
+    transition: transform .3s ease;
+}
+
+.supplier-logo {
+    font-size: 25px;
+    font-weight: 800;
+    color: white;
+    padding: 5px 12px 30px;
+}
+
+.supplier-logo span {
+    color: var(--orange);
+}
+
+.sidebar-label {
+    color: #888;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    padding: 10px 13px;
+}
+
+.supplier-menu {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.supplier-menu a {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 13px 14px;
+    border-radius: 8px;
+    color: #c5c5c5;
+    font-size: 14px;
+    transition: .25s;
+}
+
+.supplier-menu a:hover,
+.supplier-menu a.active {
+    background: var(--orange);
+    color: white;
+}
+
+.supplier-menu a i {
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    padding-top: 25px;
+}
+
+.sidebar-bottom a {
+    display: block;
+    padding: 13px;
+    color: #ddd;
+    border-radius: 8px;
+}
+
+.sidebar-bottom a:hover {
+    background: #333;
+    color: var(--orange);
+}
+
+/* =====================================
+   MAIN CONTENT
+===================================== */
+
+.supplier-main {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    padding: 28px 32px;
+    transition: .3s;
+}
+
+/* =====================================
+   HEADER
+===================================== */
+
+.supplier-header {
+    background: white;
+    padding: 17px 22px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 15px;
-    margin-top: 30px;
+    margin-bottom: 27px;
+    border: 1px solid var(--border);
+}
+
+.header-left h2 {
+    font-size: 21px;
+    color: var(--black);
+}
+
+.header-left p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 5px;
+}
+
+.supplier-profile {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.profile-avatar {
+    width: 43px;
+    height: 43px;
+    border-radius: 50%;
+    background: #fff0e3;
+    color: var(--orange);
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 18px;
+}
+
+.profile-info strong {
+    display: block;
+    font-size: 14px;
+}
+
+.profile-info small {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* =====================================
+   MOBILE MENU BUTTON
+===================================== */
+
+.menu-toggle {
+    display: none;
+    border: none;
+    background: var(--orange);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 7px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* =====================================
+   PAGE TITLE
+===================================== */
+
+.page-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 23px;
+}
+
+.page-heading h1 {
+    font-size: 25px;
+    color: var(--black);
+}
+
+.page-heading p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+/* =====================================
+   STATISTICS
+===================================== */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 19px;
+    margin-bottom: 27px;
+}
+
+.stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.stat-card h3 {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.stat-card h2 {
+    font-size: 27px;
+    margin-top: 10px;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 11px;
+    background: #fff0e3;
+    color: var(--orange);
+    display: grid;
+    place-items: center;
+    font-size: 21px;
+}
+
+/* =====================================
+   CONTENT CARDS
+===================================== */
+
+.content-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 23px;
+    margin-bottom: 23px;
+}
+
+.card-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.card-heading h3 {
+    font-size: 17px;
+}
+
+/* =====================================
+   BUTTONS
+===================================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    padding: 11px 17px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.btn-primary {
+    background: var(--orange);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--orange-dark);
+}
+
+.btn-dark {
+    background: var(--black);
+    color: white;
+}
+
+.btn-danger {
+    background: #fff0ee;
+    color: var(--red);
+}
+
+.btn-success {
+    background: #e8f8ef;
+    color: var(--green);
+}
+
+/* =====================================
+   TABLE
+===================================== */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.supplier-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+.supplier-table th {
+    background: #f8f8f8;
+    color: #666;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: left;
+    padding: 15px 13px;
+}
+
+.supplier-table td {
+    padding: 15px 13px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+}
+
+.product-image {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: white;
+}
+
+.table-actions {
+    display: flex;
+    gap: 7px;
+}
+
+.action-btn {
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* =====================================
+   STATUS BADGES
+===================================== */
+
+.status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.status-active {
+    color: #12804f;
+    background: #e7f8ee;
+}
+
+.status-pending {
+    color: #b7791f;
+    background: #fff5dd;
+}
+
+.status-inactive {
+    color: #d33;
+    background: #ffeded;
+}
+
+/* =====================================
+   FORMS
+===================================== */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 19px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 13px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    outline: none;
+    background: white;
+    font-size: 13px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 3px #ff79001a;
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
     flex-wrap: wrap;
 }
 
-.dashboard-links a {
-    display: inline-block;
-    text-decoration: none;
-    padding: 12px 25px;
+/* =====================================
+   ALERTS
+===================================== */
+
+.alert {
+    padding: 13px 16px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    font-size: 13px;
+}
+
+.alert-success {
+    background: #e8f8ef;
+    color: #147b4b;
+}
+
+.alert-error {
+    background: #fff0ee;
+    color: #c0392b;
+}
+
+/* =====================================
+   SEARCH
+===================================== */
+
+.search-box {
+    display: flex;
+    gap: 9px;
+    flex-wrap: wrap;
+}
+
+.search-box input {
+    padding: 11px 13px;
+    border: 1px solid #ddd;
     border-radius: 7px;
-    font-size: 15px;
-    font-weight: bold;
-    transition: 0.3s ease;
+    outline: none;
+    min-width: 200px;
 }
 
-/* Home Button */
+/* =====================================
+   EMPTY STATE
+===================================== */
 
-.dashboard-links a:first-child {
-    background: #f57c00;
-    color: #ffffff;
+.empty-state {
+    text-align: center;
+    padding: 45px 15px;
+    color: var(--muted);
 }
 
-.dashboard-links a:first-child:hover {
-    background: #d96500;
-    transform: translateY(-2px);
+.empty-state i {
+    font-size: 38px;
+    color: #ccc;
+    margin-bottom: 12px;
 }
 
-/* Logout Button */
+/* =====================================
+   FOOTER
+===================================== */
 
-.dashboard-links a:last-child {
-    background: #111111;
-    color: #ffffff;
+.supplier-footer {
+    text-align: center;
+    padding: 20px 10px;
+    color: #888;
+    font-size: 12px;
 }
 
-.dashboard-links a:last-child:hover {
-    background: #333333;
-    transform: translateY(-2px);
-}
+/* =====================================
+   RESPONSIVE DESIGN
+===================================== */
 
-/* Top Orange Line */
-
-.dashboard-container::before {
-    content: "";
-    display: block;
-    width: 70px;
-    height: 5px;
-    background: #f57c00;
-    border-radius: 5px;
-    margin-bottom: 25px;
-}
-
-/* ==============================
-   Responsive Design
-   ============================== */
-
-@media (max-width: 600px) {
-
-    .dashboard-container {
-        width: 92%;
-        margin: 30px auto;
-        padding: 25px 20px;
+@media(max-width: 1100px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    .dashboard-container h1 {
-        font-size: 30px;
+    .supplier-main {
+        padding: 23px;
+    }
+}
+
+@media(max-width: 800px) {
+    .supplier-sidebar {
+        transform: translateX(-100%);
     }
 
-    .dashboard-container h2 {
-        font-size: 23px;
+    .supplier-sidebar.show {
+        transform: translateX(0);
     }
 
-    .dashboard-container p {
-        font-size: 14px;
+    .supplier-main {
+        margin-left: 0;
+        padding: 18px;
     }
 
-    .dashboard-links {
-        flex-direction: column;
+    .menu-toggle {
+        display: block;
     }
 
-    .dashboard-links a {
-        text-align: center;
+    .supplier-header {
+        padding: 14px;
+    }
+
+    .header-left h2 {
+        font-size: 18px;
+    }
+}
+
+@media(max-width: 600px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+        grid-column: auto;
+    }
+
+    .supplier-header {
+        flex-wrap: wrap;
+    }
+
+    .profile-info {
+        display: none;
+    }
+
+    .page-heading h1 {
+        font-size: 21px;
+    }
+
+    .content-card {
+        padding: 15px;
+    }
+
+    .search-box input {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+    .search-box .btn {
         width: 100%;
     }
 }
